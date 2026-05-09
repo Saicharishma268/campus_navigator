@@ -1,0 +1,1013 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "ratan tata bhavan"
+      },
+      "geometry": {
+        "coordinates": [
+          82.06631557893746,
+          17.088309573926367
+        ],
+        "type": "Point"
+      },
+      "id": 0
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name ": "cotton bhavan "
+      },
+      "geometry": {
+        "coordinates": [
+          82.06692714917483,
+          17.088069663032286
+        ],
+        "type": "Point"
+      },
+      "id": 1
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "KL roa bhavan "
+      },
+      "geometry": {
+        "coordinates": [
+          82.06688851962588,
+          17.089070833324698
+        ],
+        "type": "Point"
+      },
+      "id": 2
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name ": "BillGates bhavan"
+      },
+      "geometry": {
+        "coordinates": [
+          82.06681781770953,
+          17.08970223577724
+        ],
+        "type": "Point"
+      },
+      "id": 3
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Visweswara bhavan"
+      },
+      "geometry": {
+        "coordinates": [
+          82.06679108023951,
+          17.09070660955841
+        ],
+        "type": "Point"
+      },
+      "id": 4
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Bhaskar Bhavan"
+      },
+      "geometry": {
+        "coordinates": [
+          82.06636333438018,
+          17.09103099105424
+        ],
+        "type": "Point"
+      },
+      "id": 5
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "CV raman bhavan"
+      },
+      "geometry": {
+        "coordinates": [
+          82.06691834320878,
+          17.091666237301382
+        ],
+        "type": "Point"
+      },
+      "id": 6
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "ramanujan bhavan"
+      },
+      "geometry": {
+        "coordinates": [
+          82.06667348531232,
+          17.093049684934314
+        ],
+        "type": "Point"
+      },
+      "id": 7
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "james watt bhavan"
+      },
+      "geometry": {
+        "coordinates": [
+          82.0661856431579,
+          17.09304630599587
+        ],
+        "type": "Point"
+      },
+      "id": 8
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "newton bhavan"
+      },
+      "geometry": {
+        "coordinates": [
+          82.06673358180899,
+          17.09361734574651
+        ],
+        "type": "Point"
+      },
+      "id": 9
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Technical Hub"
+      },
+      "geometry": {
+        "coordinates": [
+          82.06870329654481,
+          17.087795914175985
+        ],
+        "type": "Point"
+      },
+      "id": 10
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name ": "Pharmacy college"
+      },
+      "geometry": {
+        "coordinates": [
+          82.07059941223963,
+          17.089044652028207
+        ],
+        "type": "Point"
+      },
+      "id": 11
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "abdul kalam bhavan "
+      },
+      "geometry": {
+        "coordinates": [
+          82.07066299370956,
+          17.08983066463439
+        ],
+        "type": "Point"
+      },
+      "id": 12
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name ": "edison bhavan"
+      },
+      "geometry": {
+        "coordinates": [
+          82.07087069317942,
+          17.090118328214103
+        ],
+        "type": "Point"
+      },
+      "id": 13
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Einstein Bhavan"
+      },
+      "geometry": {
+        "coordinates": [
+          82.0722737207364,
+          17.088866381882312
+        ],
+        "type": "Point"
+      },
+      "id": 14
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Pencil canteen"
+      },
+      "geometry": {
+        "coordinates": [
+          82.0712394621533,
+          17.088866381882312
+        ],
+        "type": "Point"
+      },
+      "id": 15
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name ": "Polytechnic college"
+      },
+      "geometry": {
+        "coordinates": [
+          82.07175235267937,
+          17.088866381882312
+        ],
+        "type": "Point"
+      },
+      "id": 16
+    },
+    {
+      "type": "Feature",
+      "properties": {},
+      "geometry": {
+        "coordinates": [
+          82.07113349303614,
+          17.089644292027074
+        ],
+        "type": "Point"
+      },
+      "id": 17
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "school of business"
+      },
+      "geometry": {
+        "coordinates": [
+          82.07154465321145,
+          17.08968075648599
+        ],
+        "type": "Point"
+      },
+      "id": 18
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "staff quarters "
+      },
+      "geometry": {
+        "coordinates": [
+          82.07062433617182,
+          17.088557976767078
+        ],
+        "type": "Point"
+      },
+      "id": 19
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name ": "girls hostel"
+      },
+      "geometry": {
+        "coordinates": [
+          82.0702662424988,
+          17.08822975016969
+        ],
+        "type": "Point"
+      },
+      "id": 20
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "emblem"
+      },
+      "geometry": {
+        "coordinates": [
+          82.0687094190003,
+          17.08856011588466
+        ],
+        "type": "Point"
+      },
+      "id": 21
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "flag"
+      },
+      "geometry": {
+        "coordinates": [
+          82.06915025052734,
+          17.089398801500664
+        ],
+        "type": "Point"
+      },
+      "id": 22
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name ": "tree circle"
+      },
+      "geometry": {
+        "coordinates": [
+          82.06972244185988,
+          17.090338694322597
+        ],
+        "type": "Point"
+      },
+      "id": 23
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "saraswati temple"
+      },
+      "geometry": {
+        "coordinates": [
+          82.06959951768448,
+          17.09059394443041
+        ],
+        "type": "Point"
+      },
+      "id": 24
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "mosque"
+      },
+      "geometry": {
+        "coordinates": [
+          82.06959104015539,
+          17.090808678376845
+        ],
+        "type": "Point"
+      },
+      "id": 25
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "sai baba temple"
+      },
+      "geometry": {
+        "coordinates": [
+          82.06959104015539,
+          17.09102341207587
+        ],
+        "type": "Point"
+      },
+      "id": 26
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name ": "church"
+      },
+      "geometry": {
+        "coordinates": [
+          82.06959104015539,
+          17.091201681374244
+        ],
+        "type": "Point"
+      },
+      "id": 27
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name ": "boys hostel"
+      },
+      "geometry": {
+        "coordinates": [
+          82.06924111594986,
+          17.09155498536896
+        ],
+        "type": "Point"
+      },
+      "id": 28
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ball Canteen1"
+      },
+      "geometry": {
+        "coordinates": [
+          82.0675028202512,
+          17.090080922541787
+        ],
+        "type": "Point"
+      },
+      "id": 29
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ball Canteen2"
+      },
+      "geometry": {
+        "coordinates": [
+          82.0675028202512,
+          17.08941645938603
+        ],
+        "type": "Point"
+      },
+      "id": 30
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gallery"
+      },
+      "geometry": {
+        "coordinates": [
+          82.06762150566396,
+          17.0898499813475
+        ],
+        "type": "Point"
+      },
+      "id": 31
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "KL ROA Ground"
+      },
+      "geometry": {
+        "coordinates": [
+          82.0682101917597,
+          17.08906990222667
+        ],
+        "type": "Point"
+      },
+      "id": 32
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Technical Hub Garden"
+      },
+      "geometry": {
+        "coordinates": [
+          82.06781537881028,
+          17.088080306405303
+        ],
+        "type": "Point"
+      },
+      "id": 33
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Mango Garden"
+      },
+      "geometry": {
+        "coordinates": [
+          82.06843563784338,
+          17.090960936513426
+        ],
+        "type": "Point"
+      },
+      "id": 34
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "girls hostel g block"
+      },
+      "geometry": {
+        "coordinates": [
+          82.07021116439114,
+          17.092354457114396
+        ],
+        "type": "Point"
+      },
+      "id": 36
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "girls hostel h block"
+      },
+      "geometry": {
+        "coordinates": [
+          82.07059265321277,
+          17.092350405566492
+        ],
+        "type": "Point"
+      },
+      "id": 36
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Bus ground"
+      },
+      "geometry": {
+        "coordinates": [
+          82.07052059427127,
+          17.091166871510268
+        ],
+        "type": "Point"
+      },
+      "id": 37
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "BPD ground"
+      },
+      "geometry": {
+        "coordinates": [
+          82.07186974437963,
+          17.091104255697346
+        ],
+        "type": "Point"
+      },
+      "id": 38
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name ": "polavaram project model"
+      },
+      "geometry": {
+        "coordinates": [
+          82.06738440593364,
+          17.09307546800875
+        ],
+        "type": "Point"
+      },
+      "id": 39
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "ground"
+      },
+      "geometry": {
+        "coordinates": [
+          82.0676932175254,
+          17.09218259961024
+        ],
+        "type": "Point"
+      },
+      "id": 40
+    },
+    {
+      "type": "Feature",
+      "properties": {},
+      "geometry": {
+        "coordinates": [
+          [
+            82.06913543254876,
+            17.089413860174602
+          ],
+          [
+            82.06967361214595,
+            17.09032762591316
+          ],
+          [
+            82.06980815437083,
+            17.09143767616564
+          ],
+          [
+            82.06924873084125,
+            17.091471519053854
+          ],
+          [
+            82.06735802094079,
+            17.091349684628497
+          ],
+          [
+            82.06730137045724,
+            17.091735493368105
+          ],
+          [
+            82.06727304521644,
+            17.092229598131127
+          ],
+          [
+            82.06725322997596,
+            17.093063360295844
+          ],
+          [
+            82.0672223058715,
+            17.09329982530339
+          ],
+          [
+            82.06840128739555,
+            17.093321993882583
+          ],
+          [
+            82.06858683202745,
+            17.091437655245727
+          ],
+          [
+            82.06979760359383,
+            17.091452229833635
+          ],
+          [
+            82.06988651039762,
+            17.092431349271024
+          ],
+          [
+            82.06980146910689,
+            17.09144484023372
+          ],
+          [
+            82.0697148052518,
+            17.090337211799607
+          ],
+          [
+            82.06739163182306,
+            17.09028548428256
+          ],
+          [
+            82.06732978560586,
+            17.09134255608346
+          ],
+          [
+            82.06738776830343,
+            17.090293229301835
+          ],
+          [
+            82.06725247534297,
+            17.090223027651334
+          ],
+          [
+            82.06729354309846,
+            17.089333795806112
+          ],
+          [
+            82.06912579635167,
+            17.08940769263296
+          ],
+          [
+            82.06869730114585,
+            17.08860563226527
+          ],
+          [
+            82.06866272419262,
+            17.08850648094574
+          ],
+          [
+            82.06734879998538,
+            17.088473430493693
+          ],
+          [
+            82.06727964608058,
+            17.089345960454253
+          ],
+          [
+            82.06735571537723,
+            17.088499870855344
+          ],
+          [
+            82.06869038575547,
+            17.08850648094574
+          ],
+          [
+            82.0701910255076,
+            17.088526311213258
+          ],
+          [
+            82.07021868706886,
+            17.089438501271573
+          ],
+          [
+            82.06916063231273,
+            17.089412061042268
+          ],
+          [
+            82.07021767501999,
+            17.0894374017968
+          ],
+          [
+            82.07021075962808,
+            17.090237216946647
+          ],
+          [
+            82.06969902072728,
+            17.090349587394897
+          ],
+          [
+            82.07020384423777,
+            17.090237216946647
+          ],
+          [
+            82.07022459041036,
+            17.08942418168253
+          ],
+          [
+            82.07018309806682,
+            17.087626237448262
+          ],
+          [
+            82.06839910623597,
+            17.087546567560764
+          ],
+          [
+            82.06810865983317,
+            17.087447415677104
+          ],
+          [
+            82.06866880646771,
+            17.08849842295814
+          ]
+        ],
+        "type": "LineString"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {},
+      "geometry": {
+        "coordinates": [
+          [
+            82.06970110031307,
+            17.09035513436521
+          ],
+          [
+            82.07192764893051,
+            17.090382073980678
+          ]
+        ],
+        "type": "LineString"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {},
+      "geometry": {
+        "coordinates": [
+          [
+            82.07024721659178,
+            17.089414861565487
+          ],
+          [
+            82.07238471363019,
+            17.08936073915153
+          ]
+        ],
+        "type": "LineString"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {},
+      "geometry": {
+        "coordinates": [
+          [
+            82.07143773715512,
+            17.089398629117895
+          ],
+          [
+            82.07144654162471,
+            17.088704330122354
+          ]
+        ],
+        "type": "LineString"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {},
+      "geometry": {
+        "coordinates": [
+          [
+            82.07110536841515,
+            17.0893881094528
+          ],
+          [
+            82.07111857511956,
+            17.08872536952103
+          ]
+        ],
+        "type": "LineString"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {},
+      "geometry": {
+        "coordinates": [
+          [
+            82.06720594041246,
+            17.093323067374953
+          ],
+          [
+            82.06719883869118,
+            17.09347240363377
+          ],
+          [
+            82.06719883895391,
+            17.093731796063096
+          ]
+        ],
+        "type": "LineString"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {},
+      "geometry": {
+        "coordinates": [
+          [
+            82.06654516772517,
+            17.090196492151236
+          ],
+          [
+            82.06734795486847,
+            17.09027322600707
+          ]
+        ],
+        "type": "LineString"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {},
+      "geometry": {
+        "coordinates": [
+          [
+            82.06733290265214,
+            17.09134371995114
+          ],
+          [
+            82.06638461033856,
+            17.09128616989227
+          ]
+        ],
+        "type": "LineString"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {},
+      "geometry": {
+        "coordinates": [
+          [
+            82.06734380773133,
+            17.088490388102088
+          ],
+          [
+            82.06658617736446,
+            17.088447224899284
+          ],
+          [
+            82.06684206576642,
+            17.088471204458102
+          ]
+        ],
+        "type": "LineString"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {},
+      "geometry": {
+        "coordinates": [
+          [
+            82.06655428844203,
+            17.09018838026907
+          ],
+          [
+            82.06641276166363,
+            17.090181616396904
+          ]
+        ],
+        "type": "LineString"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {},
+      "geometry": {
+        "coordinates": [
+          [
+            82.06983989167799,
+            17.09195213113874
+          ],
+          [
+            82.07098273162768,
+            17.09201057044315
+          ]
+        ],
+        "type": "LineString"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {},
+      "geometry": {
+        "coordinates": [
+          [
+            82.07121940838118,
+            17.091994347924185
+          ],
+          [
+            82.07127094794413,
+            17.090361615204046
+          ]
+        ],
+        "type": "LineString"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "kakinada Bus ground"
+      },
+      "geometry": {
+        "coordinates": [
+          82.06847294774877,
+          17.089819999474173
+        ],
+        "type": "Point"
+      },
+      "id": 53
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Main Gate"
+      },
+      "geometry": {
+        "coordinates": [
+          82.0681227989079,
+          17.087457910347098
+        ],
+        "type": "Point"
+      },
+      "id": 54
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "ATM"
+      },
+      "geometry": {
+        "coordinates": [
+          82.0689910629514,
+          17.08763839407061
+        ],
+        "type": "Point"
+      },
+      "id": 55
+    },
+    {
+      "type": "Feature",
+      "properties": {},
+      "geometry": {
+        "coordinates": [
+          [
+            82.07027164120888,
+            17.088255174804274
+          ],
+          [
+            82.07236566783769,
+            17.08825013303563
+          ]
+        ],
+        "type": "LineString"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {},
+      "geometry": {
+        "coordinates": [
+          [
+            82.07023999345125,
+            17.088734142221284
+          ],
+          [
+            82.07239731559537,
+            17.088693808170788
+          ]
+        ],
+        "type": "LineString"
+      }
+    }
+  ]
+}
