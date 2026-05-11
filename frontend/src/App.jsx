@@ -7,11 +7,11 @@ import ChatbotPage from './pages/ChatbotPage';
 
 function App() {
   const { pathname } = useLocation();
-  const hideNav = pathname === '/map' || pathname === '/';
+  const hideNav = pathname === '/map' || pathname === '/' || pathname === '/chatbot';
 
   return (
     <>
-      {/* Navbar hidden on /map and / (home has its own full layout) */}
+      {/* Navbar hidden on /map, / (home has its own full layout), and /chatbot */}
       {!hideNav && <Navbar />}
 
       <Routes>

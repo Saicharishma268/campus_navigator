@@ -17,56 +17,125 @@ function ChatbotPage() {
   const messagesEndRef = useRef(null);
   const recognitionRef = useRef(null);
   const inputRef = useRef(null);
+  const isManualStopRef = useRef(false);
+  const activeTranscriptRef = useRef('');
+  const langRef = useRef(lang);
+
+  useEffect(() => { langRef.current = lang; }, [lang]);
+  useEffect(() => { scrollToBottom(); }, [messages]);
+  useEffect(() => {
+    return () => {
+      isManualStopRef.current = true;
+      recognitionRef.current?.stop();
+    };
+  }, []);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  useEffect(() => { scrollToBottom(); }, [messages]);
-
-  useEffect(() => {
+  const startRecognition = () => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (SpeechRecognition) {
-      recognitionRef.current = new SpeechRecognition();
-      recognitionRef.current.continuous = false;
-      recognitionRef.current.interimResults = false;
-      recognitionRef.current.lang = lang;
-      recognitionRef.current.onresult = (event) => {
-        const transcript = event.results[0][0].transcript;
-        setInputMessage((prev) => (prev ? prev + ' ' + transcript : transcript));
-        setIsListening(false);
-      };
-      recognitionRef.current.onerror = () => setIsListening(false);
-      recognitionRef.current.onend = () => setIsListening(false);
-    }
-  }, [lang]);
+    if (!SpeechRecognition || isManualStopRef.current) return;
 
-  const toggleListening = () => {
+    const recognition = new SpeechRecognition();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = langRef.current;
+    recognition.maxAlternatives = 1;
+
+    let sessionFinalText = '';
+
+    recognition.onstart = () => {
+      if (recognitionRef.current !== recognition) return;
+      setIsListening(true);
+    };
+
+    recognition.onresult = (event) => {
+      if (isManualStopRef.current || recognitionRef.current !== recognition) return; 
+
+      let interim = '';
+      let newFinals = '';
+      
+      for (let i = event.resultIndex; i < event.results.length; ++i) {
+        if (event.results[i].isFinal) newFinals += event.results[i][0].transcript;
+        else interim += event.results[i][0].transcript;
+      }
+      
+      sessionFinalText += newFinals;
+      setInputMessage(activeTranscriptRef.current + sessionFinalText + interim);
+    };
+
+    recognition.onerror = (event) => {
+      if (isManualStopRef.current || recognitionRef.current !== recognition) return;
+      console.error('Speech error:', event.error);
+      if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
+        isManualStopRef.current = true;
+        setIsListening(false);
+        alert('Microphone access denied. Please allow microphone in browser settings.');
+      }
+    };
+
+    recognition.onend = () => {
+      if (recognitionRef.current !== recognition) return; // Prevent old dying instances from auto-restarting
+
+      if (isManualStopRef.current) {
+        setIsListening(false);
+        return; 
+      }
+
+      if (sessionFinalText) {
+        activeTranscriptRef.current += sessionFinalText + ' ';
+      }
+      setTimeout(() => startRecognition(), 100);
+    };
+
+    try {
+      recognitionRef.current = recognition;
+      recognition.start();
+    } catch (err) {
+      console.error('Recognition start error:', err);
+      setIsListening(false);
+    }
+  };
+
+  const toggleListening = async () => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert('Speech recognition not supported. Please use Chrome or Edge.');
+      return;
+    }
+
     if (isListening) {
+      isManualStopRef.current = true;
       recognitionRef.current?.stop();
       setIsListening(false);
-    } else {
-      try {
-        recognitionRef.current?.start();
-        setIsListening(true);
-      } catch (e) {
-        console.error('Speech recognition failed to start', e);
-      }
+      return;
     }
+
+    isManualStopRef.current = false;
+    activeTranscriptRef.current = inputMessage ? inputMessage + ' ' : '';
+    startRecognition();
   };
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
     if (!inputMessage.trim()) return;
 
-    const newUserMessage = {
+    if (isListening) {
+      isManualStopRef.current = true;
+      recognitionRef.current?.stop();
+      setIsListening(false);
+    }
+    activeTranscriptRef.current = '';
+
+    const userText = inputMessage;
+    setMessages(prev => [...prev, {
       id: Date.now(),
       sender: 'user',
-      text: inputMessage,
+      text: userText,
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-    };
-
-    setMessages((prev) => [...prev, newUserMessage]);
+    }]);
     setInputMessage('');
     setIsTyping(true);
 
@@ -78,31 +147,27 @@ function ChatbotPage() {
           'X-Volema-Key-1': 'ed868150961e4a7baad387e5a98a1353.gb_96dffkQNtPKkUClzhQWaj',
           'X-Volema-Key-2': 'bb9531a1b2454a059ccd266fc17dfb44.ZWZQnsScq_dAFXXZgVDN1jKw',
         },
-        body: JSON.stringify({ message: inputMessage, lang }),
+        body: JSON.stringify({ message: userText, lang }),
       });
 
-      if (!response.ok) throw new Error('Network response was not ok');
-
+      if (!response.ok) throw new Error('Network error');
       const data = await response.json();
-      const botResponse = {
+
+      setMessages(prev => [...prev, {
         id: Date.now() + 1,
         sender: 'bot',
         text: data.reply || "I didn't quite catch that. Could you ask again?",
         routeAction: data.routeFound ? { source: data.source, dest: data.destination } : null,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      };
-      setMessages((prev) => [...prev, botResponse]);
+      }]);
     } catch (error) {
-      console.error('Failed to fetch bot response:', error);
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: Date.now() + 1,
-          sender: 'bot',
-          text: "Sorry, I'm having trouble connecting to the server right now. Is the backend running?",
-          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        },
-      ]);
+      console.error('Fetch error:', error);
+      setMessages(prev => [...prev, {
+        id: Date.now() + 1,
+        sender: 'bot',
+        text: "Sorry, I'm having trouble connecting to the server. Is the backend running?",
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      }]);
     } finally {
       setIsTyping(false);
     }
@@ -111,7 +176,7 @@ function ChatbotPage() {
   const quickPrompts = ['Find the library', 'Route to canteen', 'Where is the admin block?'];
 
   return (
-    <div className="flex h-[calc(100vh-4rem)] flex-col bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 overflow-hidden">
+    <div className="flex h-screen flex-col bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 overflow-hidden">
 
       {/* Header */}
       <div className="relative flex items-center justify-between px-5 py-3.5 border-b border-white/10 bg-white/5 backdrop-blur-sm shrink-0">
@@ -136,7 +201,6 @@ function ChatbotPage() {
         <button
           onClick={() => setLang(lang === 'en-US' ? 'te-IN' : 'en-US')}
           className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/10 px-3.5 py-1.5 text-xs font-semibold text-white backdrop-blur-sm transition hover:bg-white/15"
-          title="Switch Language"
         >
           <span className="text-sm">{lang === 'en-US' ? '🇺🇸' : '🇮🇳'}</span>
           {lang === 'en-US' ? 'English' : 'తెలుగు'}
@@ -146,10 +210,7 @@ function ChatbotPage() {
       {/* Messages */}
       <div className="flex-1 overflow-y-auto px-4 py-5 space-y-4 scroll-smooth">
         {messages.map((msg) => (
-          <div
-            key={msg.id}
-            className={`flex items-end gap-2.5 ${msg.sender === 'user' ? 'flex-row-reverse' : 'flex-row'}`}
-          >
+          <div key={msg.id} className={`flex items-end gap-2.5 ${msg.sender === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
             {msg.sender === 'bot' && (
               <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 shadow-md">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -159,13 +220,11 @@ function ChatbotPage() {
             )}
 
             <div className={`flex flex-col max-w-[72%] ${msg.sender === 'user' ? 'items-end' : 'items-start'}`}>
-              <div
-                className={`relative rounded-2xl px-4 py-3 text-sm leading-relaxed shadow-md ${
-                  msg.sender === 'user'
-                    ? 'bg-gradient-to-br from-blue-500 to-indigo-600 text-white rounded-br-sm'
-                    : 'bg-white/10 text-slate-100 border border-white/10 backdrop-blur-sm rounded-bl-sm'
-                }`}
-              >
+              <div className={`relative rounded-2xl px-4 py-3 text-sm leading-relaxed shadow-md ${
+                msg.sender === 'user'
+                  ? 'bg-gradient-to-br from-blue-500 to-indigo-600 text-white rounded-br-sm'
+                  : 'bg-white/10 text-slate-100 border border-white/10 backdrop-blur-sm rounded-bl-sm'
+              }`}>
                 {msg.text}
                 {msg.routeAction && (
                   <button
@@ -228,7 +287,7 @@ function ChatbotPage() {
           <button
             type="button"
             onClick={toggleListening}
-            title="Voice input"
+            title={isListening ? 'Stop listening' : 'Start voice input'}
             className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl transition-all ${
               isListening
                 ? 'bg-red-500 text-white animate-pulse shadow-md'
@@ -251,7 +310,7 @@ function ChatbotPage() {
             type="text"
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
-            placeholder={isListening ? 'Listening…' : 'Ask anything about campus…'}
+            placeholder={isListening ? '🎙️ Listening…' : 'Ask anything about campus…'}
             className="flex-1 bg-transparent px-1 py-1 text-sm text-white placeholder:text-slate-500 outline-none"
           />
 

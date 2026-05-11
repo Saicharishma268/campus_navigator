@@ -99,17 +99,21 @@ router.post('/', async (req, res) => {
     }
 
     // PASS 2: Partial Base Name Match (Shortest First)
-    // E.g. User types "billgates", we match "BillGates bhavan".
     // We sort shortest first so that "Technical Hub" (parent) matches before "Technical Hub Garden" (child) if they both strip to "technical".
     const sortedAsc = [...buildings].sort((a, b) => a.name.length - b.name.length);
     for (const b of sortedAsc) {
       if (b.alreadyMatched) continue;
 
-      let baseName = b.name.toLowerCase().replace(/(bhavan|college|block|canteen|ground|hostel|hub|temple|mosque|church|garden|project|model)/g, '').trim();
-      if (baseName.length < 3) baseName = b.name;
+      // Fix known database typos on the fly for matching
+      let correctedName = b.name.toLowerCase().replace('roa', 'rao');
+
+      // Strip common suffixes AND digits so 'Ball Canteen1' becomes 'ball'
+      let baseName = correctedName.replace(/(bhavan|college|block|canteen|ground|hostel|hub|temple|mosque|church|garden|project|model|\d+)/g, '').trim();
+      if (baseName.length < 3) baseName = correctedName;
 
       const normBase = normalize(baseName);
-      if (normBase.length > 2 && tempNormMsg.includes(normBase)) {
+      // Ensure we don't match empty strings if baseName was stripped too much
+      if (normBase.length >= 2 && tempNormMsg.includes(normBase)) {
         b.matchedNormBase = normBase;
         mentioned.push(b);
         tempNormMsg = tempNormMsg.replace(normBase, '');
