@@ -1,0 +1,136 @@
+// tests/routes.test.js
+// Tests for the route-finding API and health check.
+// We mock the database models — no real MongoDB needed.
+
+process.env.JWT_SECRET = 'test-secret';
+
+const request = require('supertest');
+const express = require('express');
+
+jest.mock('../models/Road');
+jest.mock('../models/RoadStatus');
+
+const Road        = require('../models/Road');
+const RoadStatus  = require('../models/RoadStatus');
+const routeRoutes = require('../routes/routes');
+
+const app = express();
+app.use(express.json());
+app.use('/api/routes', routeRoutes);
+app.get('/api/health', (_req, res) => res.json({ status: 'ok' }));
+
+// Fake road network: N1 --10m-- N2 --20m-- N3
+const fakeRoads = [
+  { fromNode: 'N1', toNode: 'N2', distance: 10, edgeKey: 'N1|N2' },
+  { fromNode: 'N2', toNode: 'N3', distance: 20, edgeKey: 'N2|N3' },
+];
+
+// Helper: mongoose uses Road.find({}).lean() — we need to return a chainable mock
+function mockFind(data) {
+  return jest.fn().mockReturnValue({ lean: () => Promise.resolve(data) });
+}
+
+beforeEach(() => {
+  Road.find = mockFind(fakeRoads);
+  RoadStatus.find = mockFind([]);
+  RoadStatus.getStatusMap = jest.fn().mockResolvedValue(new Map());
+});
+
+// ─── HEALTH CHECK ─────────────────────────────────────────────────────────────
+describe('GET /api/health', () => {
+  test('returns status ok', async () => {
+    const res = await request(app).get('/api/health');
+    expect(res.status).toBe(200);
+    expect(res.body.status).toBe('ok');
+  });
+});
+
+// ─── ROUTE FINDING ────────────────────────────────────────────────────────────
+describe('POST /api/routes/optimal', () => {
+
+  test('finds a route between two valid node IDs', async () => {
+    const res = await request(app)
+      .post('/api/routes/optimal')
+      .send({ source: 'N1', destination: 'N3' });
+
+    expect(res.status).toBe(200);
+    expect(res.body.routes.length).toBeGreaterThan(0);
+    expect(res.body.routes[0].nodes).toContain('N1');
+    expect(res.body.routes[0].nodes).toContain('N3');
+  });
+
+  test('the route includes a distance and time', async () => {
+    const res = await request(app)
+      .post('/api/routes/optimal')
+      .send({ source: 'N1', destination: 'N3' });
+
+    const route = res.body.routes[0];
+    expect(route.distance).toBeGreaterThan(0);
+    expect(route.time).toBeGreaterThan(0);
+  });
+
+  test('returns 400 when source is missing', async () => {
+    const res = await request(app)
+      .post('/api/routes/optimal')
+      .send({ destination: 'N3' });
+    expect(res.status).toBe(400);
+    expect(res.body.error).toMatch(/source/i);
+  });
+
+  test('returns 400 when destination is missing', async () => {
+    const res = await request(app)
+      .post('/api/routes/optimal')
+      .send({ source: 'N1' });
+    expect(res.status).toBe(400);
+    expect(res.body.error).toMatch(/destination/i);
+  });
+
+  test('returns 400 when source and destination are the same', async () => {
+    const res = await request(app)
+      .post('/api/routes/optimal')
+      .send({ source: 'N1', destination: 'N1' });
+    expect(res.status).toBe(400);
+    expect(res.body.error).toMatch(/same/i);
+  });
+
+  test('returns 404 when node does not exist in the road network', async () => {
+    const res = await request(app)
+      .post('/api/routes/optimal')
+      .send({ source: 'N1', destination: 'N999' });
+    expect(res.status).toBe(404);
+  });
+
+});
+
+// ─── NODES LIST ───────────────────────────────────────────────────────────────
+describe('GET /api/routes/nodes', () => {
+
+  test('returns all road node IDs', async () => {
+    const res = await request(app).get('/api/routes/nodes');
+    expect(res.status).toBe(200);
+    expect(res.body.nodes).toContain('N1');
+    expect(res.body.nodes).toContain('N2');
+    expect(res.body.nodes).toContain('N3');
+  });
+
+  test('returns an empty list when there are no roads', async () => {
+    Road.find = mockFind([]);
+    const res = await request(app).get('/api/routes/nodes');
+    expect(res.status).toBe(200);
+    expect(res.body.nodes).toEqual([]);
+  });
+
+});
+
+// ─── PUBLIC ROAD STATUS ───────────────────────────────────────────────────────
+describe('GET /api/routes/road-status', () => {
+
+  test('returns road segments with default blocked=false and crowdLevel=low', async () => {
+    const res = await request(app).get('/api/routes/road-status');
+    expect(res.status).toBe(200);
+    expect(res.body.total).toBe(2);
+    expect(res.body.segments[0].blocked).toBe(false);
+    expect(res.body.segments[0].crowdLevel).toBe('low');
+  });
+
+});

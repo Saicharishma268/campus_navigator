@@ -1,0 +1,150 @@
+// tests/admin.test.js
+// Tests for the admin login system and protected routes.
+//
+// We MOCK (fake) the database — no real MongoDB needed.
+// The tests check that the API logic is correct, not the database itself.
+
+process.env.JWT_SECRET = 'test-secret';
+
+const request  = require('supertest');
+const express  = require('express');
+const jwt      = require('jsonwebtoken');
+const bcrypt   = require('bcryptjs');
+
+// ── Mock mongoose models so no real DB connection is needed ──────────────────
+jest.mock('../models/AdminUser');
+jest.mock('../models/Road');
+jest.mock('../models/RoadStatus');
+
+const AdminUser  = require('../models/AdminUser');
+const adminRoutes = require('../routes/admin');
+
+const app = express();
+app.use(express.json());
+app.use('/api/admin', adminRoutes);
+
+// ─── LOGIN TESTS ──────────────────────────────────────────────────────────────
+describe('POST /api/admin/login', () => {
+
+  test('logs in with correct username and password', async () => {
+    // Fake a database result: admin exists and password is correct
+    const fakeAdmin = {
+      _id: 'abc123',
+      username: 'admin',
+      role: 'superadmin',
+      verifyPassword: jest.fn().mockResolvedValue(true),
+      toJSON: () => ({ username: 'admin', role: 'superadmin' }),
+    };
+    AdminUser.findOne = jest.fn().mockResolvedValue(fakeAdmin);
+
+    const res = await request(app)
+      .post('/api/admin/login')
+      .send({ username: 'admin', password: 'campus@123' });
+
+    expect(res.status).toBe(200);
+    expect(res.body.token).toBeDefined();           // must get a token back
+    expect(res.body.admin.username).toBe('admin');  // must get username back
+    expect(res.body.admin.passwordHash).toBeUndefined(); // password must never be sent
+  });
+
+  test('rejects wrong password', async () => {
+    const fakeAdmin = {
+      _id: 'abc123',
+      username: 'admin',
+      role: 'superadmin',
+      verifyPassword: jest.fn().mockResolvedValue(false), // password check fails
+    };
+    AdminUser.findOne = jest.fn().mockResolvedValue(fakeAdmin);
+
+    const res = await request(app)
+      .post('/api/admin/login')
+      .send({ username: 'admin', password: 'wrongpassword' });
+
+    expect(res.status).toBe(401);
+    expect(res.body.error).toBe('Invalid credentials.');
+  });
+
+  test('rejects a username that does not exist', async () => {
+    AdminUser.findOne = jest.fn().mockResolvedValue(null); // no user found
+
+    const res = await request(app)
+      .post('/api/admin/login')
+      .send({ username: 'nobody', password: 'anything' });
+
+    expect(res.status).toBe(401);
+    expect(res.body.error).toBe('Invalid credentials.');
+  });
+
+  test('rejects login when username or password is missing', async () => {
+    const res = await request(app)
+      .post('/api/admin/login')
+      .send({ username: 'admin' }); // no password
+
+    expect(res.status).toBe(400);
+    expect(res.body.error).toMatch(/required/i);
+  });
+
+  test('username is case-insensitive (ADMIN and admin work the same)', async () => {
+    const fakeAdmin = {
+      _id: 'abc123',
+      username: 'admin',
+      role: 'superadmin',
+      verifyPassword: jest.fn().mockResolvedValue(true),
+      toJSON: () => ({ username: 'admin', role: 'superadmin' }),
+    };
+    AdminUser.findOne = jest.fn().mockResolvedValue(fakeAdmin);
+
+    const res = await request(app)
+      .post('/api/admin/login')
+      .send({ username: 'ADMIN', password: 'campus@123' }); // uppercase
+
+    expect(res.status).toBe(200);
+    expect(res.body.token).toBeDefined();
+  });
+
+});
+
+// ─── PROTECTED ROUTE TESTS ────────────────────────────────────────────────────
+describe('GET /api/admin/me', () => {
+
+  function makeToken() {
+    return jwt.sign(
+      { id: 'abc123', username: 'admin', role: 'superadmin' },
+      process.env.JWT_SECRET,
+      { expiresIn: '1h' }
+    );
+  }
+
+  test('returns admin info when a valid token is sent', async () => {
+    AdminUser.findById = jest.fn().mockResolvedValue({
+      username: 'admin',
+      role: 'superadmin',
+      toJSON: () => ({ username: 'admin', role: 'superadmin' }),
+    });
+
+    const res = await request(app)
+      .get('/api/admin/me')
+      .set('Authorization', `Bearer ${makeToken()}`);
+
+    expect(res.status).toBe(200);
+    expect(res.body.username).toBe('admin');
+  });
+
+  test('blocks access when no token is sent', async () => {
+    const res = await request(app).get('/api/admin/me');
+    // No Authorization header at all
+
+    expect(res.status).toBe(401);
+    expect(res.body.error).toBe('No token provided.');
+  });
+
+  test('blocks access when a fake token is sent', async () => {
+    const res = await request(app)
+      .get('/api/admin/me')
+      .set('Authorization', 'Bearer this.is.a.fake.token');
+
+    expect(res.status).toBe(401);
+    expect(res.body.error).toBe('Invalid or expired token.');
+  });
+
+});
