@@ -1,11 +1,25 @@
 import { useState, useRef, useEffect } from 'react';
 
+// Static UI strings that never touch the backend, so they need their own
+// translations rather than relying on chat.js's translateText(). Only the
+// greeting + quick-reply chips need this — everything else in the chat
+// (the bot's actual replies) already comes back translated from the server.
+const GREETING = {
+  'en-US': 'Hello! I am your Campus Navigator assistant. How can I help you find your way today?',
+  'te-IN': 'హలో! నేను మీ క్యాంపస్ నావిగేటర్ సహాయకుడిని. ఈ రోజు మీకు దారి కనుక్కోవడంలో ఎలా సహాయపడగలను?',
+};
+
+const QUICK_PROMPTS = {
+  'en-US': ['Find the library', 'Route to canteen', 'Where is the admin block?'],
+  'te-IN': ['గ్రంథాలయాన్ని కనుగొనండి', 'క్యాంటీన్‌కు మార్గం', 'అడ్మిన్ బ్లాక్ ఎక్కడ ఉంది?'],
+};
+
 function ChatbotPage() {
   const [messages, setMessages] = useState([
     {
       id: 1,
       sender: 'bot',
-      text: 'Hello! I am your Campus Navigator assistant. How can I help you find your way today?',
+      text: GREETING['en-US'],
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     },
   ]);
@@ -18,10 +32,20 @@ function ChatbotPage() {
   const recognitionRef = useRef(null);
   const inputRef = useRef(null);
   const isManualStopRef = useRef(false);
+
   const activeTranscriptRef = useRef('');
   const langRef = useRef(lang);
 
   useEffect(() => { langRef.current = lang; }, [lang]);
+  useEffect(() => {
+    // Only swap the greeting's language if it's still the only message —
+    // once a real conversation has started we don't want to rewrite history.
+    setMessages(prev =>
+      prev.length === 1 && prev[0].id === 1
+        ? [{ ...prev[0], text: GREETING[lang] || GREETING['en-US'] }]
+        : prev,
+    );
+  }, [lang]);
   useEffect(() => { scrollToBottom(); }, [messages]);
   useEffect(() => {
     return () => {
@@ -121,6 +145,14 @@ function ChatbotPage() {
   const handleSendMessage = async (e) => {
     e.preventDefault();
     if (!inputMessage.trim()) return;
+    // Guard against a second send firing while one is still in flight.
+    // The submit *button* is visually disabled during isTyping, but pressing
+    // Enter inside the text field submits the form directly and bypasses
+    // that disabled attribute — so without this check, two overlapping
+    // fetch() calls could go out, and whichever server response happens to
+    // come back first gets appended first, regardless of send order. That's
+    // what causes replies to look "out of sync" with what was asked.
+    if (isTyping) return;
 
     if (isListening) {
       isManualStopRef.current = true;
@@ -173,7 +205,7 @@ function ChatbotPage() {
     }
   };
 
-  const quickPrompts = ['Find the library', 'Route to canteen', 'Where is the admin block?'];
+  const quickPrompts = QUICK_PROMPTS[lang] || QUICK_PROMPTS['en-US'];
 
   return (
     <div className="flex h-screen flex-col bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 overflow-hidden">
