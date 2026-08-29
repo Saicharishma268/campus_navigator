@@ -176,8 +176,6 @@ function ChatbotPage() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-Volema-Key-1': 'ed868150961e4a7baad387e5a98a1353.gb_96dffkQNtPKkUClzhQWaj',
-          'X-Volema-Key-2': 'bb9531a1b2454a059ccd266fc17dfb44.ZWZQnsScq_dAFXXZgVDN1jKw',
         },
         body: JSON.stringify({ message: userText, lang }),
       });
